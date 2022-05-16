@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+const inventorySchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -18,5 +18,5 @@ const userSchema = new Schema({
   timestamps: true,
 });
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+const Inventory = mongoose.model("Inventory", inventorySchema);
+module.exports = Inventory;
