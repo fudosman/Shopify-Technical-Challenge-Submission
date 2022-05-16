@@ -10,7 +10,6 @@ const sendErrorDev = (err, res) => {
     });
 };
 
-
 // Error Handling For Production Mode
 const sendErrorProd = (err, res) => {
     // If error is operational (trusted), send message to client
@@ -29,7 +28,6 @@ const sendErrorProd = (err, res) => {
     }
 };
 
-// Handle Individual Errors
 
 // DB Cast Error
 const castErrorDB = (err) => {
@@ -51,14 +49,12 @@ const validationError = (err) => {
     return new AppError(message, 400);
 };
 
-//// JWT Errors
 
 // Unauthorized error
 const JWTError = () => new AppError("Please Login Again", 401);
 
 // ExpiredError
 const JWTExpiredError = () => new AppError("Session Expired! Please Login Again", 401);
-
 
 module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;

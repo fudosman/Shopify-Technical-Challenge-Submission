@@ -1,10 +1,8 @@
-const express = require("express");
-const router = express.Router();
 const {
   StatusCodes
 } = require('http-status-codes');
 
-router.get("/", (req, res) => {
+exports.postInventory = (req, res) => {
   try {
     return res.status(StatusCodes.OK).json({
       "status": "success",
@@ -17,8 +15,9 @@ router.get("/", (req, res) => {
       "error_message": error.message
     });
   }
-});
-router.post("/", (req, res) => {
+};
+
+exports.putInventory = (req, res) => {
   try {
     return res.status(StatusCodes.CREATED).json({
       "status": "success",
@@ -31,8 +30,9 @@ router.post("/", (req, res) => {
       "error_message": error.message
     });
   }
-});
-router.put("/", (req, res) => {
+};
+
+exports.deleteInventory = (req, res) => {
   try {
     return res.status(StatusCodes.OK).json({
       "status": "success",
@@ -45,8 +45,9 @@ router.put("/", (req, res) => {
       "error_message": error.message
     });
   }
-});
-router.delete("/", (req, res) => {
+};
+
+exports.getAllInventory = (req, res) => {
   try {
     return res.status(StatusCodes.OK).json({
       "status": "success",
@@ -59,6 +60,19 @@ router.delete("/", (req, res) => {
       "error_message": error.message
     });
   }
-});
+};
 
-module.exports = router;
+exports.getOneInventory = (req, res) => {
+  try {
+    return res.status(StatusCodes.OK).json({
+      "status": "success",
+      "message": "the delete resource route is running",
+      "data": "deleting resource"
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      "status": "error",
+      "error_message": error.message
+    });
+  }
+};

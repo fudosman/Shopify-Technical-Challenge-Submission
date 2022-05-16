@@ -7,7 +7,7 @@ An inventory tracking web application for a logistics company.
 **Problem Statement:**
 this is the shopify technical challenge, to be shared as a public github repo, runable on replit without futher setups. this API service has the following features:
 
-*Basic functionalities*
+**Basic functionalities*
 
 * Create Inventory Items.
 * Edit Inventory Items.

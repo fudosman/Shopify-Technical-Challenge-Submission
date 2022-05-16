@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const globalErrorHandler = require("./errors/app_error_handler");
-
 require("./middlewares/pre-route.middleware")(app);
 
 // API Version 1

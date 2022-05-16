@@ -4,7 +4,8 @@ This is a basic inventory tracking service, built using Node, Express and MongoD
 
 ## *API Use Guide:*
 
-To run unit tests, use the **'dev'** branch
+To run on a dev environtment, use  **npm run dev**
+To run on a , use  **npm run dev**
 
 ### **Functionalities**
 
