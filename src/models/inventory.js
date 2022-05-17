@@ -5,14 +5,17 @@ const inventorySchema = new Schema({
   name: {
     type: String,
     required: true,
+  },  
+  isDeleted: {
+    type: Boolean,
+    default: false,
   },
-  email: {
+  deletionComment: {
     type: String,
-    required: true,
+    default: "",
   },
-  password: {
+  type: {
     type: String,
-    required: true,
   },
 },{
   timestamps: true,
