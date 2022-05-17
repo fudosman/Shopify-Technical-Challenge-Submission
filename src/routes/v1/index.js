@@ -3,6 +3,6 @@ const router = app.Router();
 
 const inventory = require("./inventory");
 
-router.use("/resource1", inventory);
+router.use("/", inventory);
 
 module.exports = router;

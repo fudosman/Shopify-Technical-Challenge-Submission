@@ -29,14 +29,17 @@ exports.postInventory = async (req, res) => {
 exports.putInventory = async (req, res) => {
   try {
     const inventoryId = req.params.id;
-    const inventory = await findById(inventoryId);
+    const inventory = await Inventory.findById(inventoryId);
+
     if (!inventory) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
         "error_message": "Inventory not found"
       });
     }
-    const {name} = req.body;
+    const {
+      name
+    } = req.body;
     inventory.name = name;
     const savedInventory = await inventory.save();
     return res.status(StatusCodes.OK).json({
@@ -56,7 +59,9 @@ exports.putInventory = async (req, res) => {
 
 exports.getAllInventory = async (req, res) => {
   try {
-    const allInventory = await Inventory.find({isDeleted: false});
+    const allInventory = await Inventory.find({
+      isDeleted: false
+    });
     if (!allInventory) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
@@ -77,11 +82,11 @@ exports.getAllInventory = async (req, res) => {
   }
 };
 
-exports.getOneInventory = (req, res) => {
+exports.getOneInventory = async (req, res) => {
   try {
     const inventoryId = req.params.id;
-    const inventory = findById(inventoryId);
-    if (!inventory && inventory.isDeleted) {
+    const inventory = await Inventory.findById(inventoryId);
+    if (!inventory || inventory.isDeleted === true) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
         "error_message": "Inventory not found"
@@ -105,8 +110,8 @@ exports.getOneInventory = (req, res) => {
 exports.deleteInventory = async (req, res) => {
   try {
     const inventoryId = req.params.id;
-    const inventory = await findById(inventoryId);
-    if (!inventory) {
+    const inventory = await Inventory.findById(inventoryId);
+    if (!inventory || inventory.isDeleted === true) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
         "error_message": "Inventory not found"
@@ -114,7 +119,14 @@ exports.deleteInventory = async (req, res) => {
     }
 
     inventory.isDeleted = true;
-    inventory.deletionComment = req.body.deletionComment;
+    if (req.body.deletionComment) {
+      inventory.deletionComment = req.body.deletionComment;
+    } else {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        "status": "error",
+        "error_message": "Please provide a deletion comment"
+      });
+    }
     const deletedInventory = await inventory.save();
 
     if (deletedInventory) {
@@ -122,7 +134,7 @@ exports.deleteInventory = async (req, res) => {
         "status": "success",
         "message": "Inventory successfully deleted",
       });
-    } 
+    }
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       "status": "error",
@@ -135,7 +147,7 @@ exports.deleteInventory = async (req, res) => {
 exports.undeleteInventory = async (req, res) => {
   try {
     const inventoryId = req.params.id;
-    const inventory = await findById(inventoryId);
+    const inventory = await Inventory.findById(inventoryId);
     if (!inventory) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
@@ -152,7 +164,7 @@ exports.undeleteInventory = async (req, res) => {
         "status": "success",
         "message": "Inventory successfully undeleted",
       });
-    } 
+    }
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       "status": "error",
