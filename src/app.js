@@ -12,7 +12,7 @@ app.use("/api", require("./routes/versions"));
 app.get("/ping", (req, res) => res.status(StatusCodes.OK).send("the server is running!"));
 
 // home route for documentation
-app.use("/", (req, res, next) => {
+app.use("/", (req, res) => {
   res.status(StatusCodes.ACCEPTED).send(`Visit this link for the Shopify API <a href="https://documenter.getpostman.com/view/19482223/Uyxkk5ZX"> Documentation </a>`);
 });
 

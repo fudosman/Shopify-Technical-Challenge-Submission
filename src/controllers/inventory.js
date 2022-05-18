@@ -6,10 +6,16 @@ const Inventory = require("../models/inventory");
 exports.postInventory = async (req, res) => {
   try {
     const {
-      name
+      item_name,
+      item_category,
+      item_brand,
+      item_price
     } = req.body;
     const inventory = new Inventory({
-      name,
+      item_name,
+      item_category,
+      item_brand,
+      item_price
     });
     const savedInventory = await inventory.save();
     return res.status(StatusCodes.CREATED).json({
@@ -61,7 +67,7 @@ exports.getAllInventory = async (req, res) => {
   try {
     const allInventory = await Inventory.find({
       isDeleted: false
-    });
+    }).sort('-createdAt');
     if (!allInventory) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
