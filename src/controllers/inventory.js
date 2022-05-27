@@ -7,15 +7,19 @@ exports.postInventory = async (req, res) => {
   try {
     const {
       item_name,
-      item_category,
+      item_warehouse,
       item_brand,
-      item_price
+      item_price,
+      item_quantity,
+      item_description,
     } = req.body;
     const inventory = new Inventory({
       item_name,
-      item_category,
+      item_warehouse,
       item_brand,
-      item_price
+      item_price,
+      item_quantity,
+      item_description,
     });
     const savedInventory = await inventory.save();
     return res.status(StatusCodes.CREATED).json({
@@ -35,7 +39,7 @@ exports.postInventory = async (req, res) => {
 exports.putInventory = async (req, res) => {
   try {
     const inventoryId = req.params.id;
-    const inventory = await Inventory.findById(inventoryId);
+    const inventory = await Inventory.findById(inventoryId).populate('item_warehouse').populate('item_brand');
 
     if (!inventory) {
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -44,9 +48,33 @@ exports.putInventory = async (req, res) => {
       });
     }
     const {
-      name
+      item_name,
+      item_warehouse,
+      item_brand,
+      item_price,
+      item_quantity,
+      item_description,
     } = req.body;
-    inventory.name = name;
+
+    if (item_name) {
+      inventory.item_name = item_name;
+    }
+    if (item_warehouse) {
+      inventory.item_warehouse = item_warehouse;
+    }
+    if (item_brand){
+      inventory.item_brand = item_brand;
+    }
+    if (item_price){
+      inventory.item_price = item_price;    
+    }
+    if(item_quantity){
+      inventory.item_quantity = item_quantity;
+    }
+    if(item_description){
+      inventory.item_description = item_description;
+    }
+
     const savedInventory = await inventory.save();
     return res.status(StatusCodes.OK).json({
       "status": "success",
@@ -67,7 +95,7 @@ exports.getAllInventory = async (req, res) => {
   try {
     const allInventory = await Inventory.find({
       isDeleted: false
-    }).sort('-createdAt');
+    }).sort('-createdAt').populate('item_warehouse').populate('item_brand');
     if (!allInventory) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
@@ -91,7 +119,7 @@ exports.getAllInventory = async (req, res) => {
 exports.getOneInventory = async (req, res) => {
   try {
     const inventoryId = req.params.id;
-    const inventory = await Inventory.findById(inventoryId);
+    const inventory = await Inventory.findById(inventoryId).populate('item_warehouse').populate('item_brand');
     if (!inventory || inventory.isDeleted === true) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",

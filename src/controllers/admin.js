@@ -1,6 +1,8 @@
-const Category = require("../models/category");
+const Warehouse = require("../models/warehouse");
 const Brand = require("../models/brand");
-
+const {
+  StatusCodes
+} = require('http-status-codes');
 
 // create a brand
 exports.postBrand = async (req, res) => {
@@ -27,7 +29,7 @@ exports.postBrand = async (req, res) => {
 };
 
 // read the brand  
-exports.getBrand = async (req, res) => {
+exports.getAllBrand = async (req, res) => {
   try {
     const brands = await Brand.find();
     return res.status(StatusCodes.OK).json({
@@ -39,6 +41,31 @@ exports.getBrand = async (req, res) => {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       "status": "error",
       "message": "Brands not fetched",
+      "error_message": error.message
+    });
+  }
+};
+
+// read a brand by id
+exports.getBrand = async (req, res) => {
+  try {
+    const brandId = req.params.id;
+    const brand = await Brand.findById(brandId);
+    if (!brand) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        "status": "error",
+        "error_message": "Brand not found"
+      });
+    }
+    return res.status(StatusCodes.OK).json({
+      "status": "success",
+      "message": "Brand successfully fetched",
+      "data": brand
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      "status": "error",
+      "message": "Brand not fetched",
       "error_message": error.message
     });
   }
@@ -74,7 +101,7 @@ exports.putBrand = async (req, res) => {
   }
 };
 
-// delete the brand
+// delete a brand
 exports.deleteBrand = async (req, res) => {
   try {
     const brandId = req.params.id;
@@ -99,35 +126,42 @@ exports.deleteBrand = async (req, res) => {
   }
 };
 
-
-// create a category
-exports.postCategory = async (req, res) => {
+// create a warehouse
+exports.postWarehouse = async (req, res) => {
   try {
     const {
-      item_category
+      warehouse_name,
+      warehouse_address,
+      warehouse_contact,
+      warehouse_email,
+      warehouse_status
     } = req.body;
-    const category = new Category({
-      item_category
+    const warehouse = new Warehouse({
+      warehouse_name,
+      warehouse_address,
+      warehouse_contact,
+      warehouse_email,
+      warehouse_status
     });
-    const savedCategory = await category.save();
+    const savedwarehouse = await warehouse.save();
     return res.status(StatusCodes.CREATED).json({
       "status": "success",
-      "message": "Category successfully created",
-      "data": savedCategory
+      "message": "warehouse successfully created",
+      "data": savedwarehouse
     });
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       "status": "error",
-      "message": "Category not created",
+      "message": "warehouse not created",
       "error_message": error.message
     });
   }
 };
 
-// read the category
-exports.getCategory = async (req, res) => {
+// read all warehouse
+exports.getAllWarehouse = async (req, res) => {
   try {
-    const categories = await Category.find();
+    const categories = await Warehouse.find();
     return res.status(StatusCodes.OK).json({
       "status": "success",
       "message": "Categories successfully fetched",
@@ -142,56 +176,91 @@ exports.getCategory = async (req, res) => {
   }
 };
 
-// update the category
-exports.putCategory = async (req, res) => {
+// read a warehouse by id
+exports.getWarehouse = async (req, res) => {
   try {
-    const categoryId = req.params.id;
-    const category = await Category.findById(categoryId);
-    if (!category) {
+    const warehouseId = req.params.id;
+    const warehouse = await Warehouse.findById(warehouseId);
+    if (!warehouse) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
-        "error_message": "Category not found"
+        "error_message": "warehouse not found"
       });
     }
-    const {
-      item_category
-    } = req.body;
-    category.item_category = item_category;
-    const savedCategory = await category.save();
     return res.status(StatusCodes.OK).json({
       "status": "success",
-      "message": "Category successfully updated",
-      "data": savedCategory
+      "message": "warehouse successfully fetched",
+      "data": warehouse
     });
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       "status": "error",
-      "message": "Category not updated",
+      "message": "warehouse not fetched",
       "error_message": error.message
     });
   }
 };
 
-// delete the category
-exports.deleteCategory = async (req, res) => {
+// update the warehouse
+exports.putWarehouse = async (req, res) => {
   try {
-    const categoryId = req.params.id;
-    const category = await Category.findById(categoryId);
-    if (!category) {
+    const warehouseId = req.params.id;
+    const warehouse = await Warehouse.findById(warehouseId);
+    if (!warehouse) {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
-        "error_message": "Category not found"
+        "error_message": "warehouse not found"
       });
     }
-    await category.remove();
+    const {
+      warehouse_name,
+      warehouse_address,
+      warehouse_contact,
+      warehouse_email,
+      warehouse_status
+    } = req.body;
+
+    warehouse.warehouse_name = warehouse_name;
+    warehouse.warehouse_address = warehouse_address;
+    warehouse.warehouse_contact = warehouse_contact;
+    warehouse.warehouse_email = warehouse_email;
+    warehouse.warehouse_status = warehouse_status;
+    
+    const savedwarehouse = await warehouse.save();
     return res.status(StatusCodes.OK).json({
       "status": "success",
-      "message": "Category successfully deleted"
+      "message": "warehouse successfully updated",
+      "data": savedwarehouse
     });
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       "status": "error",
-      "message": "Category not deleted",
+      "message": "warehouse not updated",
+      "error_message": error.message
+    });
+  }
+};
+
+// delete the warehouse
+exports.deleteWarehouse = async (req, res) => {
+  try {
+    const warehouseId = req.params.id;
+    const warehouse = await Warehouse.findById(warehouseId);
+    if (!warehouse) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        "status": "error",
+        "error_message": "warehouse not found"
+      });
+    }
+    await Warehouse.deleteOne();
+    return res.status(StatusCodes.OK).json({
+      "status": "success",
+      "message": "warehouse successfully deleted"
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      "status": "error",
+      "message": "warehouse not deleted",
       "error_message": error.message
     });
   }
