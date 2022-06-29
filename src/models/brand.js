@@ -5,7 +5,7 @@ const brandSchema = new Schema({
   item_brand: {
     type: String,
     required: true,
-  },  
+  }
 },{
   timestamps: true,
 });

@@ -51,7 +51,7 @@ exports.getBrand = async (req, res) => {
   try {
     const brandId = req.params.id;
     const brand = await Brand.findById(brandId);
-    if (!brand) {
+    if (!brand || brand === undefined || null || "") {
       return res.status(StatusCodes.NOT_FOUND).json({
         "status": "error",
         "error_message": "Brand not found"

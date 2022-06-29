@@ -141,6 +141,7 @@ exports.getOneInventory = async (req, res) => {
 };
 
 
+
 exports.deleteInventory = async (req, res) => {
   try {
     const inventoryId = req.params.id;
