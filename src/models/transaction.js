@@ -5,8 +5,8 @@ const transactionSchema = new Schema({
   transaction_name: {
     type: String,
     required: true,
-  },  
-},{
+  },
+}, {
   timestamps: true,
 });
 

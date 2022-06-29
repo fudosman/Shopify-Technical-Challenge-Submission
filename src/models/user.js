@@ -20,11 +20,12 @@ const userSchema = new Schema({
     required: true,
     minlength: 3,
     maxlength: 255
-  },
-  transactions: [{
-    type: Schema.Types.ObjectId,
-    ref: "Transaction"
-  }]
+  }
+  // ,
+  // transactions: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: "Transaction"
+  // }]
 }, {
   timestamps: true
 });
